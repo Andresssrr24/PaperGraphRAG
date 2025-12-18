@@ -1,5 +1,4 @@
-
-#### Graph-Augmented Retrieval for Efficient Factual Question Answering
+## Graph-Augmented Retrieval for Efficient Factual Question Answering
 
 This projects explores a graph-first Retrieval-Augmented Generation (RAG) system for answering questions about scientific papers. Unlike traditional RAG pipelines that rely on large unstructured context windows, this system combines vector similarity search with knowledge graph traversal to retrieve, ground, and compress relevant information before answer generation. Papers are ingested from PDFs, chunked, embedded, and connected through explicit semantic relationships in a Neo4j graph. Multi-stage LLM summarization ensures token-efficient reasoning while preserving provenance and factual grounding. The system is optimized for content understanding rather than bibliographic queries and demonstrates a practical alternative to chain-based RAG frameworks for research-oriented applications.
 
