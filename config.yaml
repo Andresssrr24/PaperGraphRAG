@@ -1,0 +1,130 @@
+# Neo4j
+neo4j:
+  uri: "neo4j://localhost:7687"
+  username: "neo4j"
+  password: "${NEO4J_PASSWORD}"
+  database: "neo4j"
+
+# embeddings
+embeddings:
+  provider: "openai"
+  model: "text-embedding-3-small"
+  dimensions: 1536
+  # Alternative: sentence-transformers
+  # provider: "sentence_transformers"
+  # model: "sentence-transformers/all-MiniLM-L6-v2"
+
+# text chunking conf
+chunking:
+  chunk_size: 1000
+  chunk_overlap: 150
+  is_separator_regex: false
+
+# graph indexes
+indexes:
+  chunk_vector_index: "paper_chunks"
+  paper_vector_index: "paper_index"
+  text_fulltext_index: "chunk_text_index"
+  node_for_text_index: "Chunk"
+  property_for_text_index: "text"
+
+# similarity search
+similarity:
+  top_k_neighbors: 5  # SIMILAR_TO relationships
+  default_search_k: 10  # Default k for vector search
+
+# agents
+agents:
+  # user query expansion
+  query_expansion:
+    provider: "groq"
+    model: "openai/gpt-oss-120b"
+    temperature: 0.0
+    max_tokens: 2048
+    reasoning:
+      enabled: true
+      effort: "high"
+    structured_output_name: "expanded_queries"
+    description: "Expands user queries into multiple alternative formulations"
+    system_prompt: |
+      You are a query expansion expert that reviews queries for a retrieval system.
+      Expand the user's query into 3-5 alternative formulations based on topic complexity.
+      Focus on search intent and simplicity for a vector search system.
+
+      **Critical**: For any known acronyms (MoE, CNN, GPT, BERT, etc.):
+      - Generate AT LEAST ONE query with the acronym
+      - Generate AT LEAST ONE query without the full name
+      - Example: Both "GPT architecture" AND "Generative Pre-trained Transformer architecture"
+      
+      IMPORTANT: If a question compares different concepts, formulate an isolate question for each concept.
+      
+      Remember keep questions simple.
+      Answer ONLY with the alternative questions.
+  
+  # chunk summarization
+  summarization:
+    provider: "groq"
+    model: "openai/gpt-oss-20b"
+    temperature: 0.0
+    max_tokens: 1024
+    reasoning:
+      enabled: true
+      effort: "medium"
+    concurrency:
+      max_concurrent: 5  # semaphore
+    description: "Summarizes retrieved chunks with their neighbors"
+    system_prompt: |
+      Summarize the following text.
+      Keep under 150 words.
+      Focus only on technical info relevant to: "{query}"
+      
+      Chunk text:
+      {text}
+      
+      Neighbors:
+      {neighbors}
+  
+  # final response generation
+  response_generation:
+    provider: "openai"
+    model: "gpt-5-nano"
+    temperature: 1.0
+    max_tokens: 8000
+    reasoning:
+      enabled: true
+      effort: "high"
+    description: "Generates final user-facing response from summaries"
+    system_prompt: |
+      Generate a response that answers: "{query}""
+      Use ONLY the content from these chunk summaries:
+
+      {final_summary}
+
+      You response should be clear and detailed, explaining from scratch the question.
+
+      ALWAYS finish your response with the sources section.
+      Sources:
+      {chunks_metadata}
+
+# rag pipeline
+rag:
+  # retrieval settings
+  retrieval:
+    default_top_k: 10
+    expand_context: true
+    default_hops: 1
+  
+  # context expansion
+  expansion:
+    enabled: true
+    max_neighbors: 10
+
+# api keys
+api_keys:
+  openai: "${OPENAI_API_KEY}"
+  groq: "${FREE_GROQ_API_KEY}"
+
+# logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

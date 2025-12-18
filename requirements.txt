@@ -1,0 +1,12 @@
+groq
+pydantic
+openai
+python-dotenv
+pyyaml
+pymupdf
+langchain-neo4j
+langchain-openai
+langchain-text-splitters
+neo4j
+gradio
+
