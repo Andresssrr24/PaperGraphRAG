@@ -122,7 +122,7 @@ rag:
 # api keys
 api_keys:
   openai: "${OPENAI_API_KEY}"
-  groq: "${FREE_GROQ_API_KEY}"
+  groq: "${GROQ_API_KEY}"
 
 # logging
 logging:
