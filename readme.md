@@ -1,14 +1,13 @@
 ## Graph-Augmented Retrieval for Efficient Factual Question Answering
 
-This projects explores a graph-first Retrieval-Augmented Generation (RAG) system for answering questions about scientific papers. Unlike traditional RAG pipelines that rely on large unstructured context windows, this system combines vector similarity search with knowledge graph traversal to retrieve, ground, and compress relevant information before answer generation. Papers are ingested from PDFs, chunked, embedded, and connected through explicit semantic relationships in a Neo4j graph. Multi-stage LLM summarization ensures token-efficient reasoning while preserving provenance and factual grounding. The system is optimized for content understanding rather than bibliographic queries and demonstrates a practical alternative to chain-based RAG frameworks for research-oriented applications.
+This project explores a graph-first Retrieval-Augmented Generation (RAG) system for answering questions about scientific papers. Unlike traditional RAG pipelines that rely on large unstructured context windows, this system combines vector similarity search with knowledge graph traversal to retrieve, ground, and compress relevant information before answer generation. Papers are ingested from PDFs, chunked, embedded, and connected through explicit semantic relationships in a Neo4j graph. Multi-stage LLM summarization ensures token-efficient reasoning while preserving provenance and factual grounding. The system is optimized for content understanding rather than bibliographic queries and demonstrates a practical alternative to chain-based RAG frameworks for research-oriented applications.
 
-## Features
+## Components
 
 - **Graph-Augmented Retrieval**: Combines vector search with knowledge graph traversal to find relevant context.
 - **PDF Ingestion**: Automatically extracts text and metadata from uploaded PDF papers.
 - **Neo4j Integration**: Stores papers, chunks, and relationships in a Neo4j graph database.
-- **LLM Powered**: Uses OpenAI and Groq for query expansion, summarization, and response generation.
-- **Interactive UI**: Gradio-based web interface for easy interaction.
+- **LLM**: Uses OpenAI and Groq for query expansion, summarization, and response generation.
 
 ## Prerequisites
 
@@ -43,7 +42,7 @@ This projects explores a graph-first Retrieval-Augmented Generation (RAG) system
     ```
 
 2.  **Config File:**
-    You can customize the application settings in `config.yaml`. This includes:
+    To customize the application settings in `config.yaml`. This includes:
     - Neo4j URI and username.
     - Embedding model settings.
     - Chunking parameters.
@@ -52,7 +51,7 @@ This projects explores a graph-first Retrieval-Augmented Generation (RAG) system
 ## Usage
 
 1.  **Start Neo4j:**
-    Ensure your Neo4j database is running and accessible at the URI specified in `config.yaml` (default: `neo4j://localhost:7687`).
+    Ensure Neo4j database is running and accessible at the URI specified in `config.yaml` (default: `neo4j://localhost:7687`).
 
 2.  **Run the Application:**
     ```bash
@@ -60,14 +59,14 @@ This projects explores a graph-first Retrieval-Augmented Generation (RAG) system
     ```
 
 3.  **Access the UI:**
-    Open your web browser and navigate to `http://localhost:7860`.
+    Through `http://localhost:7860`.
 
 4.  **Ingest Papers:**
     - Use the "Upload a paper as PDF" section to upload a research paper.
     - The system will process the PDF, extract text and metadata, and populate the knowledge graph.
 
 5.  **Ask Questions:**
-    - Enter your query in the text box.
+    - Enter a query in the text box.
     - Click "Run Explanation" to get an answer based on the knowledge graph.
 
 ## Project Structure
@@ -85,6 +84,7 @@ Thus:
 - Metadata is minimal and conservative
 - Paper structure is initially treated as flat text
 - Graph structure is used for reasoning and provenance, not citation formatting
+Additionally, the system works as a demonstration, not as a production system. It does not contain explicit pipelines for general-purpose answering (e.g., content moderation, simple question answering without querying graph, etc.).
 
 #### System Architecture
 High-level flow
